@@ -1,31 +1,26 @@
 package com.camel.restapi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.camel.restapi.dto.Order;
+import com.camel.restapi.model.OrderModel;
+import com.camel.restapi.repository.OrderRepository;
 
 @Service
 public class OrderService {
 	
-	private List<Order> list = new ArrayList<>();
-	
-	@PostConstruct
-	public void initDB() {
-		list.add(new Order(67, "Mobile", 5000));
-		list.add(new Order(68, "Book", 800));		
+	@Autowired
+	OrderRepository repo;
+		
+	public OrderModel addOrder(Order order) {
+		OrderModel model = new OrderModel(order);
+		return repo.save(model);
 	}
 	
-	public Order addOrder(Order order) {
-		list.add(order);
-		return order;
-	}
-	
-	public List<Order> getOrders(){
-		return list;
+	public List<OrderModel> getOrders(){
+		return repo.findAll();
 	}
 }
